@@ -1,2 +1,2 @@
 # Flutter
-Projetos desenvolvidos em Flutter(dart).
+Projetos desenvolvidos em Flutter(Dart).
