@@ -1,3 +1,8 @@
+
 void main() {
-  print("Hello World");
+  printHelloWorld(message: "Deu Certo!!");
+}
+
+void printHelloWorld( {var message} ) {
+  print(message);
 }
