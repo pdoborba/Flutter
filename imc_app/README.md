@@ -1,16 +1,10 @@
-# imc_app
+# 2º Projeto: Calculadora de IMC (imc_app).
+## Contém:
+- Botão p/ apagar tudo.;
+- Inputs p/ adicionar informações de peso e altura;
+- Botão p/ calcular o peso por altura e ver o indice corporal;
+- Estado monstrando o resultado.
 
-A new Flutter project.
+## Captura de tela:
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="https://i.ibb.co/WvYHz8T/Simulator-Screen-Shot-i-Phone-8-2021-08-10-at-19-19-03.png" alt="project-list-to-do" border="0" height="520px">
