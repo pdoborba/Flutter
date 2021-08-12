@@ -1,8 +1,8 @@
 # 3º Projeto: Conversor de Moedas (Conversor_de_moedas).
 ## Contém:
 - Inputs para anexar valores;
-- API;
-- renderização em tempo real do valor colocado podendo ter variações de real dolar e euro;
+- Consumindo API;
+- Renderização em tempo real do valor colocado podendo ter variações de real dolar e euro;
 
 ## Captura de tela:
 
