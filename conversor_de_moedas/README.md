@@ -1,16 +1,9 @@
-# conversor_de_moedas
+# 3º Projeto: Conversor de Moedas (Conversor_de_moedas).
+## Contém:
+- Inputs para anexar valores;
+- API;
+- renderização em tempo real do valor colocado podendo ter variações de real dolar e euro;
 
-A new Flutter project.
+## Captura de tela:
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="https://i.ibb.co/t41NmcH/Simulator-Screen-Shot-i-Phone-8-2021-08-12-at-10-06-19.png" alt="project-contador" border="0" height="520px">
