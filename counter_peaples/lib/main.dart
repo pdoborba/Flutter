@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Text(
             "Pessoas $_peaple",
-            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.bold),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Padding(
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
           Text(
             _infoText,
             style: TextStyle(
-                color: Colors.blue,
+                color: Colors.blue[50],
                 fontStyle: FontStyle.italic,
                 fontSize: 30.0),
           )
