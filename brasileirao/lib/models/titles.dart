@@ -1,4 +1,5 @@
 class Titles {
+  int? id;
   String championship;
 
   String year;
@@ -6,5 +7,6 @@ class Titles {
   Titles({
     required this.championship,
     required this.year,
+    id,
   });
 }

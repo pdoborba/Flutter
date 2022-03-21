@@ -7,6 +7,7 @@ import '../repository/team_repository.dart';
 import '../models/teams.dart';
 import '../models/titles.dart';
 
+// ignore: must_be_immutable
 class AddTitlePage extends StatefulWidget {
   AddTitlePage({Key? key, required this.team}) : super(key: key);
 

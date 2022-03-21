@@ -7,6 +7,7 @@ import '../models/teams.dart';
 import '../widgets/logo.dart';
 import 'add_title_page.dart';
 
+// ignore: must_be_immutable
 class TeamPage extends StatefulWidget {
   late Team team;
 
@@ -27,7 +28,7 @@ class _TeamPageState extends State<TeamPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: widget.team.color,
+          backgroundColor: Colors.teal.shade900,
           title: Text(widget.team.name,
               style: const TextStyle(color: (Colors.white))),
           actions: [
@@ -75,25 +76,23 @@ class _TeamPageState extends State<TeamPage> {
         .teams
         .firstWhere((t) => t.name == widget.team.name);
 
-    final quantity = team.title.length;
+    final quantity = team.titles.length;
 
     return quantity == 0
-        ? Container(
-            child: const Center(
-              child: Text(
-                'Esse time não tem títulos! :(',
-                style: TextStyle(fontSize: 20),
-              ),
+        ? const Center(
+            child: Text(
+              'Esse time não tem títulos! :(',
+              style: TextStyle(fontSize: 20),
             ),
           )
         : ListView.separated(
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 leading: const Icon(Icons.emoji_events),
-                title: Text(team.title[index].championship),
-                trailing: Text(team.title[index].year),
+                title: Text(team.titles[index].championship),
+                trailing: Text(team.titles[index].year),
                 onTap: () {
-                  Get.to(EditTitlePage(titles: team.title[index]),
+                  Get.to(() => EditTitlePage(titles: team.titles[index]),
                       fullscreenDialog: true);
                 },
               );

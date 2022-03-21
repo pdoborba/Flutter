@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:brasileirao/models/titles.dart';
 
 class Team {
+  int? id;
   String name;
   String logo;
   int points;
-  Color color;
-  List<Titles> title = [];
+  late List<Titles> titles = [];
 
-  Team({
-    required this.name,
-    required this.logo,
-    required this.points,
-    required this.color,
-  });
+  Team(
+      {required this.name,
+      required this.logo,
+      required this.points,
+      id,
+      titles});
 }

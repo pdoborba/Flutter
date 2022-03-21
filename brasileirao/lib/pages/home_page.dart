@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:brasileirao/pages/home_controller.dart';
+import 'package:brasileirao/controllers/theme_controller.dart';
 import 'package:brasileirao/pages/team_page.dart';
 import 'package:brasileirao/repository/team_repository.dart';
 import 'package:flutter/material.dart';
@@ -16,20 +16,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = HomeController();
-  }
+  var controller = ThemeController.to;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Brasileirão',
-              style: TextStyle(color: (Colors.white))),
+          title: const Text('Brasileirão'),
+          actions: [
+            PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: Obx(() => controller.isDark.value
+                        ? const Icon(Icons.brightness_7)
+                        : const Icon(Icons.brightness_2)),
+                    title: Obx(() => controller.isDark.value
+                        ? const Text('Tema Claro')
+                        : const Text('Tema Escuro')),
+                    onTap: () => controller.changeTheme(),
+                  ),
+                )
+              ],
+            )
+          ],
         ),
         body: Consumer<TeamsRepository>(builder: (context, repository, child) {
           return ListView.separated(
@@ -42,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                     width: 40,
                   ),
                   title: Text(table[team].name),
-                  subtitle: Text('Títulos ${table[team].title.length}'),
+                  subtitle: Text('Títulos ${table[team].titles.length}'),
                   trailing: Text(
                     table[team].points.toString(),
                   ),

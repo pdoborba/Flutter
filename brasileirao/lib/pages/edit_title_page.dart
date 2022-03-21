@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../models/titles.dart';
 
+// ignore: must_be_immutable
 class EditTitlePage extends StatefulWidget {
   EditTitlePage({Key? key, required this.titles}) : super(key: key);
 
