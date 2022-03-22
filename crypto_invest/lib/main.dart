@@ -1,4 +1,4 @@
-import 'package:crypto_invest/home_page.dart';
+import 'package:crypto_invest/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
