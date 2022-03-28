@@ -1,13 +1,13 @@
 class Moeda {
   String icone;
-  String name;
-  String sig;
-  double price;
+  String nome;
+  String sigla;
+  double preco;
 
   Moeda({
     required this.icone,
-    required this.name,
-    required this.sig,
-    required this.price,
+    required this.nome,
+    required this.sigla,
+    required this.preco,
   });
 }

@@ -1,28 +1,29 @@
+import 'package:cripto_moedas/pages/carteira_page.dart';
+import 'package:cripto_moedas/pages/configuracoes_page.dart';
+import 'package:cripto_moedas/pages/favoritas_page.dart';
+import 'package:cripto_moedas/pages/moedas_page.dart';
 import 'package:flutter/material.dart';
 
-import 'moedas_page.dart';
-import 'favoritesPage.dart';
-
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int pagPresent = 0;
+  int paginaAtual = 0;
   late PageController pc;
 
   @override
   void initState() {
     super.initState();
-    pc = PageController(initialPage: pagPresent);
+    pc = PageController(initialPage: paginaAtual);
   }
 
-  setPagPresent(pag) {
+  setPaginaAtual(pagina) {
     setState(() {
-      pagPresent = pag;
+      paginaAtual = pagina;
     });
   }
 
@@ -31,23 +32,32 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: PageView(
         controller: pc,
-        children: const [
+        children: [
           MoedasPage(),
-          FavoritesPage(),
+          FavoritasPage(),
+          CarteiraPage(),
+          ConfiguracoesPage(),
         ],
-        onPageChanged: setPagPresent,
+        onPageChanged: setPaginaAtual,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: pagPresent,
-        items: const [
+        currentIndex: paginaAtual,
+        type: BottomNavigationBarType.fixed,
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Todas'),
-          BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Favoritos')
+          BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Favoritas'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet), label: 'Carteira'),
+          BottomNavigationBarItem(icon: Icon(Icons.people_alt), label: 'Conta'),
         ],
-        onTap: (pag) {
-          pc.animateToPage(pag,
-              duration: const Duration(milliseconds: 400), curve: Curves.ease);
+        onTap: (pagina) {
+          pc.animateToPage(
+            pagina,
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
+          );
         },
-        backgroundColor: Colors.grey[100],
+        // backgroundColor: Colors.grey[100],
       ),
     );
   }

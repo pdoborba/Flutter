@@ -1,25 +1,31 @@
-import 'package:crypto_invest/models/repository/favorites_repository.dart';
-import 'package:crypto_invest/pages/home_page.dart';
+import 'package:cripto_moedas/configs/app_settings.dart';
+import 'package:cripto_moedas/configs/hive_config.dart';
+import 'package:cripto_moedas/repositories/conta_repository.dart';
+import 'package:cripto_moedas/repositories/favoritas_repository.dart';
+import 'package:cripto_moedas/services/auth_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'meu_aplicativo.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => FavoritesRepository(),
-    child: const MyApp(),
-  ));
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveConfig.start();
+  await Firebase.initializeApp();
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Crypto Invest',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.amber),
-      home: const HomePage(),
-    );
-  }
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthService()),
+        ChangeNotifierProvider(create: (context) => ContaRepository()),
+        ChangeNotifierProvider(create: (context) => AppSettings()),
+        ChangeNotifierProvider(
+          create: (context) => FavoritasRepository(
+            auth: context.read<AuthService>(),
+          ),
+        ),
+      ],
+      child: MeuAplicativo(),
+    ),
+  );
 }

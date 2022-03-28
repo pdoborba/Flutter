@@ -1,41 +1,48 @@
+import 'package:cripto_moedas/configs/app_settings.dart';
+import 'package:cripto_moedas/models/moeda.dart';
+import 'package:cripto_moedas/repositories/conta_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../models/moeda.dart';
-
-class MoedasDetails extends StatefulWidget {
+class MoedasDetalhesPage extends StatefulWidget {
   Moeda moeda;
 
-  MoedasDetails({Key? key, required this.moeda}) : super(key: key);
+  MoedasDetalhesPage({Key? key, required this.moeda}) : super(key: key);
 
   @override
-  State<MoedasDetails> createState() => _MoedasDetailsState();
+  _MoedasDetalhesPageState createState() => _MoedasDetalhesPageState();
 }
 
-class _MoedasDetailsState extends State<MoedasDetails> {
-  NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
+class _MoedasDetalhesPageState extends State<MoedasDetalhesPage> {
+  late NumberFormat real;
   final _form = GlobalKey<FormState>();
   final _valor = TextEditingController();
   double quantidade = 0;
+  late ContaRepository conta;
 
-  comprar() {
+  comprar() async {
     if (_form.currentState!.validate()) {
       // Salvar a compra
+      await conta.comprar(widget.moeda, double.parse(_valor.text));
 
       Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Compra realizada com sucesso!')),
+        SnackBar(content: Text('Compra realizada com sucesso!')),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    readNumberFormat();
+    conta = Provider.of<ContaRepository>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.moeda.name),
+        title: Text(widget.moeda.nome),
       ),
       body: Padding(
         padding: EdgeInsets.all(24),
@@ -53,7 +60,7 @@ class _MoedasDetailsState extends State<MoedasDetails> {
                   ),
                   Container(width: 10),
                   Text(
-                    real.format(widget.moeda.price),
+                    real.format(widget.moeda.preco),
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w600,
@@ -69,10 +76,10 @@ class _MoedasDetailsState extends State<MoedasDetails> {
                     width: MediaQuery.of(context).size.width,
                     child: Container(
                       child: Text(
-                        '$quantidade ${widget.moeda.sig}',
-                        style: const TextStyle(
+                        '$quantidade ${widget.moeda.sigla}',
+                        style: TextStyle(
                           fontSize: 20,
-                          color: Colors.teal,
+                          color: Colors.amber,
                         ),
                       ),
                       margin: EdgeInsets.only(bottom: 24),
@@ -84,14 +91,14 @@ class _MoedasDetailsState extends State<MoedasDetails> {
                     ),
                   )
                 : Container(
-                    margin: const EdgeInsets.only(bottom: 24),
+                    margin: EdgeInsets.only(bottom: 24),
                   ),
             Form(
               key: _form,
               child: TextFormField(
                 controller: _valor,
-                style: const TextStyle(fontSize: 22),
-                decoration: const InputDecoration(
+                style: TextStyle(fontSize: 22),
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Valor',
                   prefixIcon: Icon(Icons.monetization_on_outlined),
@@ -107,6 +114,8 @@ class _MoedasDetailsState extends State<MoedasDetails> {
                     return 'Informe o valor da compra';
                   } else if (double.parse(value) < 50) {
                     return 'Compra mínima é R\$ 50,00';
+                  } else if (double.parse(value) > conta.saldo) {
+                    return 'Você não tem saldo suficiente';
                   }
                   return null;
                 },
@@ -114,7 +123,7 @@ class _MoedasDetailsState extends State<MoedasDetails> {
                   setState(() {
                     quantidade = (value.isEmpty)
                         ? 0
-                        : double.parse(value) / widget.moeda.price;
+                        : double.parse(value) / widget.moeda.preco;
                   });
                 },
               ),
@@ -126,7 +135,7 @@ class _MoedasDetailsState extends State<MoedasDetails> {
                 onPressed: comprar,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(Icons.check),
                     Padding(
                       padding: EdgeInsets.all(16),
@@ -143,5 +152,10 @@ class _MoedasDetailsState extends State<MoedasDetails> {
         ),
       ),
     );
+  }
+
+  readNumberFormat() {
+    final loc = context.watch<AppSettings>().locale;
+    real = NumberFormat.currency(locale: loc['locale'], name: loc['name']);
   }
 }

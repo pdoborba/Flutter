@@ -1,137 +1,175 @@
-import 'package:crypto_invest/models/repository/favorites_repository.dart';
-import 'package:crypto_invest/pages/moeda_datails.dart';
+import 'package:cripto_moedas/configs/app_settings.dart';
+import 'package:cripto_moedas/models/moeda.dart';
+import 'package:cripto_moedas/pages/moedas_detalhes_page.dart';
+import 'package:cripto_moedas/repositories/favoritas_repository.dart';
+import 'package:cripto_moedas/repositories/moeda_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:crypto_invest/models/repository/moeda_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../models/moeda.dart';
-
 class MoedasPage extends StatefulWidget {
-  const MoedasPage({Key? key}) : super(key: key);
+  MoedasPage({Key? key}) : super(key: key);
 
   @override
-  State<MoedasPage> createState() => _MoedasPageState();
+  _MoedasPageState createState() => _MoedasPageState();
 }
 
 class _MoedasPageState extends State<MoedasPage> {
-  final table = MoedaRepository.table;
-  NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
-  List<Moeda> select = [];
-  late FavoritesRepository favorites;
+  final tabela = MoedaRepository.tabela;
+  late NumberFormat real;
+  late Map<String, String> loc;
+  List<Moeda> selecionadas = [];
+  late FavoritasRepository favoritas;
 
-  appBarDinamic() {
-    if (select.isEmpty) {
+  readNumberFormat() {
+    loc = context.watch<AppSettings>().locale;
+    real = NumberFormat.currency(locale: loc['locale'], name: loc['name']);
+  }
+
+  changeLanguageButton() {
+    final locale = loc['locale'] == 'pt_BR' ? 'en_US' : 'pt_BR';
+    final name = loc['locale'] == 'pt_BR' ? '\$' : 'R\$';
+
+    return PopupMenuButton(
+      icon: Icon(Icons.language),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+            child: ListTile(
+          leading: Icon(Icons.swap_vert),
+          title: Text('Usar $locale'),
+          onTap: () {
+            context.read<AppSettings>().setLocale(locale, name);
+            Navigator.pop(context);
+          },
+        )),
+      ],
+    );
+  }
+
+  appBarDinamica() {
+    if (selecionadas.isEmpty) {
       return AppBar(
-        title: const Center(child: Text('Crypto Invest')),
+        title: Text('Crypto Invest'),
+        actions: [
+          changeLanguageButton(),
+        ],
       );
     } else {
       return AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
-            setState(() {
-              select = [];
-            });
+            limparSelecionadas();
           },
         ),
-        title: Text('${select.length} Selecionados'),
-        backgroundColor: Colors.amber[300],
-        elevation: 2,
-        iconTheme: const IconThemeData(color: Colors.black87),
-        titleTextStyle: const TextTheme(
-                headline6: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold))
-            .headline6,
+        title: Text('${selecionadas.length} selecionados'),
+        backgroundColor: Colors.amber[600],
+        elevation: 1,
+        iconTheme: IconThemeData(color: Colors.white), toolbarTextStyle: TextTheme(
+          headline6: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ).bodyText2, titleTextStyle: TextTheme(
+          headline6: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ).headline6,
       );
     }
   }
 
-  details(Moeda moeda) {
+  mostrarDetalhes(Moeda moeda) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MoedasDetails(moeda: moeda),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (_) => MoedasDetalhesPage(moeda: moeda),
+      ),
+    );
   }
 
-  clearSelects() {
+  limparSelecionadas() {
     setState(() {
-      select = [];
+      selecionadas = [];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    favorites = context.watch<FavoritesRepository>();
+    // favoritas = Provider.of<FavoritasRepository>(context);
+    favoritas = context.watch<FavoritasRepository>();
+    readNumberFormat();
 
     return Scaffold(
-        appBar: appBarDinamic(),
-        body: ListView.separated(
-          itemBuilder: (BuildContext context, int moeda) {
-            return ListTile(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              leading: (select.contains(table[moeda]))
-                  ? const CircleAvatar(
-                      child: Icon(Icons.check),
-                    )
-                  : SizedBox(
-                      child: Image.asset(table[moeda].icone),
-                      width: 40,
-                    ),
-              title: Row(
-                children: [
-                  Text(
-                    table[moeda].name,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                    ),
+      appBar: appBarDinamica(),
+      body: ListView.separated(
+        itemBuilder: (BuildContext context, int moeda) {
+          return ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            leading: (selecionadas.contains(tabela[moeda]))
+                ? CircleAvatar(
+                    child: Icon(Icons.check),
+                  )
+                : SizedBox(
+                    child: Image.asset(tabela[moeda].icone),
+                    width: 40,
                   ),
-                  if (favorites.list.contains(table[moeda]))
-                    const Icon(
-                      Icons.circle,
-                      color: Colors.amberAccent,
-                      size: 8,
-                    )
-                ],
-              ),
-              trailing: Text(real.format(table[moeda].price)),
-              selected: select.contains(table[moeda]),
-              selectedColor: Colors.amber,
-              onLongPress: () {
-                setState(() {
-                  (select.contains(table[moeda]))
-                      ? select.remove(table[moeda])
-                      : select.add(table[moeda]);
-                });
-              },
-              onTap: () => details(table[moeda]),
-            );
-          },
-          padding: const EdgeInsets.all(16),
-          separatorBuilder: (_, __) => const Divider(),
-          itemCount: table.length,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: select.isNotEmpty
-            ? FloatingActionButton.extended(
-                onPressed: () {
-                  favorites.salveAll(select);
-                  clearSelects();
-                },
-                icon: const Icon(Icons.star),
-                label: const Text(
-                  'Favoritar',
+            title: Row(
+              children: [
+                Text(
+                  tabela[moeda].nome,
                   style: TextStyle(
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              )
-            : null);
+                if (favoritas.lista
+                    .any((fav) => fav.sigla == tabela[moeda].sigla))
+                  Icon(Icons.circle, color: Colors.amber, size: 8),
+              ],
+            ),
+            trailing: Text(
+              real.format(tabela[moeda].preco),
+              style: TextStyle(fontSize: 15),
+            ),
+            selected: selecionadas.contains(tabela[moeda]),
+            selectedTileColor: Colors.amber[50],
+            onLongPress: () {
+              setState(() {
+                (selecionadas.contains(tabela[moeda]))
+                    ? selecionadas.remove(tabela[moeda])
+                    : selecionadas.add(tabela[moeda]);
+              });
+            },
+            onTap: () => mostrarDetalhes(tabela[moeda]),
+          );
+        },
+        padding: EdgeInsets.all(16),
+        separatorBuilder: (_, ___) => Divider(),
+        itemCount: tabela.length,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: selecionadas.isNotEmpty
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                favoritas.saveAll(selecionadas);
+                limparSelecionadas();
+              },
+              icon: Icon(Icons.star),
+              label: Text(
+                'FAVORITAR',
+                style: TextStyle(
+                  letterSpacing: 0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          : null,
+    );
   }
 }

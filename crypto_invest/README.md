@@ -1,16 +1,20 @@
-# crypto_invest
+# 🪙 Cripto Moedas
 
-Sua nova carteira de investimentos.
+Projeto de exemplo utilizado no Curso de Desenvolvimento de Apps em Flutter do Prof. Dr. Diego Antunes. Para acompanhar as aulas, basta acessar [a playlist com os vídeos](https://www.youtube.com/playlist?list=PL_wKlpKIC9vWCRIgMvH8pbRmX8XVouRv1).
 
-## Getting Started
+O projeto consiste em passo a passo construir um aplicativo para listar algumas cripto moedas tais como o Bitcoin, Ethereum, entre outras, mostrar algumas informações de histórico de preços, gráficos e outros dados. 
 
-This project is a starting point for a Flutter application.
+## O que vamos usar?
 
-A few resources to get you started if this is your first Flutter project:
+- Widgets de UI: AppBar, Lists, Images, etc.
+- Navegação (Routing) entre telas.
+- Navegação usando BottomNavigation + PageViews.
+- Gerenciamento de Estado (simples e Provider).
+- Introdução à animações.
+- Banco de Dados (SQLite e Firestore).
+- Integração com APIs REST para os dados de criptos. 
+- E muito mais...
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Versões do App
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Cada semana do curso irá produzir uma nova versão do app. A evolução de cada versão pode ser acompanhada no branch de cada semana (ou seja, basta mudar o branch). 

@@ -1,4 +1,4 @@
-package br.com.crypto_invest.borbabook.crypto_invest
+package br.com.cryptoinvest.borbabook
 
 import io.flutter.embedding.android.FlutterActivity
 
